@@ -3,7 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Colorful QR Code Generator</title>
+
+  <title>Colorful QR Code Generator - Free Online Tool</title>
+  
+  <meta name="description" content="Generate colorful QR codes instantly with our free online QR code generator. Perfect for URLs, text, Wi-Fi credentials, and more. No signup required." />
+  <meta name="keywords" content="QR code generator, colorful QR code, free QR codes, online QR code maker, create QR code" />
+  <meta name="author" content="chewbeezy" />
+  <link rel="canonical" href="https://chewbeezy.github.io/QR-Code-Generator/" />
+
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -15,11 +22,24 @@
       padding: 30px;
       border-radius: 15px;
       box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
     }
     h1 {
       margin-bottom: 25px;
       font-weight: 700;
       text-shadow: 1px 1px 4px rgba(0,0,0,0.4);
+    }
+    label {
+      font-weight: 600;
+      display: block;
+      margin-bottom: 8px;
+      text-align: left;
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+      font-size: 1.1rem;
     }
     input {
       width: 80%;
@@ -29,6 +49,7 @@
       border-radius: 8px;
       margin-bottom: 20px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+      outline-offset: 2px;
     }
     input:focus {
       outline: none;
@@ -44,9 +65,13 @@
       cursor: pointer;
       transition: background 0.3s ease;
       box-shadow: 0 6px 12px rgba(255,111,97,0.6);
+      max-width: 200px;
+      margin: 0 auto;
     }
-    button:hover {
+    button:hover,
+    button:focus {
       background: #ff4a3d;
+      outline: none;
     }
     #qrcode {
       margin-top: 30px;
@@ -55,19 +80,40 @@
       display: inline-block;
       border-radius: 15px;
       box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+      min-height: 220px; /* maintain space even before generation */
+    }
+    footer {
+      margin-top: auto;
+      font-size: 0.9em;
+      color: #eee;
+      padding-top: 20px;
     }
   </style>
 </head>
 <body>
-  <h1>Colorful QR Code Generator</h1>
-  <input id="text" type="text" placeholder="Enter text or URL" />
-  <br />
-  <button onclick="generateQRCode()">Generate QR Code</button>
-  <div id="qrcode"></div>
+  <header>
+    <h1>Colorful QR Code Generator</h1>
+    <p>Generate colorful QR codes instantly and for free. Use it for links, Wi-Fi credentials, contact info, and more!</p>
+  </header>
+
+  <main>
+    <form id="qrForm" aria-label="QR Code Generator Form" onsubmit="generateQRCode(event)">
+      <label for="text">Enter text or URL to generate QR code:</label>
+      <input type="text" id="text" name="text" placeholder="Enter URL or text here" aria-required="true" required autocomplete="off" />
+      <button type="submit">Generate QR Code</button>
+    </form>
+
+    <div id="qrcode" aria-live="polite" aria-atomic="true" aria-label="Generated QR Code"></div>
+  </main>
+
+  <footer>
+    <p>© 2025 chewbeezy. All rights reserved.</p>
+  </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
   <script>
-    function generateQRCode() {
+    function generateQRCode(event) {
+      event.preventDefault();
       const text = document.getElementById('text').value.trim();
       const qrDiv = document.getElementById('qrcode');
       qrDiv.innerHTML = '';
@@ -78,6 +124,7 @@
       QRCode.toCanvas(text, { width: 200 }, function (error, canvas) {
         if (error) {
           alert('Error generating QR code');
+          console.error(error);
           return;
         }
         qrDiv.appendChild(canvas);
